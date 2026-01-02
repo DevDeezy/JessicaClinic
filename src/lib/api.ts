@@ -41,6 +41,12 @@ export const api = {
       body: { email, password },
     }),
 
+  register: (name: string, email: string, password: string, phone?: string) =>
+    request<{ token: string; user: any }>('auth-register', {
+      method: 'POST',
+      body: { name, email, password, phone },
+    }),
+
   getMe: (token: string) =>
     request<any>('auth-me', { token }),
 

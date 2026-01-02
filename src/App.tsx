@@ -4,6 +4,7 @@ import { useAuthStore } from './store/auth'
 // Pages
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 import DashboardLayout from './layouts/DashboardLayout'
 import DashboardPage from './pages/dashboard/DashboardPage'
 import AgendaPage from './pages/dashboard/AgendaPage'
@@ -38,6 +39,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/registar" element={<RegisterPage />} />
       
       <Route
         path="/dashboard"
