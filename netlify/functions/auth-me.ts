@@ -2,8 +2,10 @@ import { Handler } from '@netlify/functions'
 import { prisma } from './lib/prisma'
 import { getUserFromRequest } from './lib/auth'
 import { success, error, unauthorized, options } from './lib/response'
+import { logRequest, logError } from './lib/logger'
 
 export const handler: Handler = async (event) => {
+  logRequest('auth-me', event)
   if (event.httpMethod === 'OPTIONS') {
     return options()
   }
@@ -36,7 +38,7 @@ export const handler: Handler = async (event) => {
 
     return success(dbUser)
   } catch (err) {
-    console.error('Auth me error:', err)
+    logError('auth-me', err)
     return error('Internal server error', 500)
   }
 }
