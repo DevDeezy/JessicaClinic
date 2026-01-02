@@ -1,7 +1,7 @@
 [build]
   # We don't build the frontend here - it goes to GitHub Pages
   # This is for Netlify Functions only
-  command = "npm install && npx prisma generate"
+  command = "npm install"
   publish = "netlify-placeholder"
   functions = "netlify/functions"
 
