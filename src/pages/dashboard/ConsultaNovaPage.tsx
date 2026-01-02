@@ -11,13 +11,14 @@ export default function ConsultaNovaPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const preSelectedClientId = searchParams.get('clientId')
+  const preSelectedDate = searchParams.get('date')
   const { token } = useAuthStore()
   
   const [clients, setClients] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     clientId: preSelectedClientId || '',
-    date: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
+    date: preSelectedDate || format(addDays(new Date(), 1), 'yyyy-MM-dd'),
     time: '10:00',
     duration: 60,
     type: 'consulta',

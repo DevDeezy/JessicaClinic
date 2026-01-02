@@ -57,7 +57,10 @@ export default function AgendaPage() {
           <h1 className="text-3xl font-display font-semibold text-sage-800">Agenda</h1>
           <p className="text-sage-500 mt-1">Visualize e gerencie as suas consultas</p>
         </div>
-        <Link to="/dashboard/consultas/nova" className="flex items-center gap-2 px-5 py-2.5 bg-terracotta-500 text-white rounded-xl font-medium hover:bg-terracotta-600">
+        <Link
+          to={`/dashboard/consultas/nova?date=${format(selectedDate, 'yyyy-MM-dd')}`}
+          className="flex items-center gap-2 px-5 py-2.5 bg-terracotta-500 text-white rounded-xl font-medium hover:bg-terracotta-600"
+        >
           <Plus className="w-4 h-4" />Nova Consulta
         </Link>
       </div>
@@ -130,7 +133,12 @@ export default function AgendaPage() {
               <h3 className="font-semibold text-sage-800">{format(selectedDate, "d 'de' MMMM", { locale: pt })}</h3>
               <p className="text-sm text-sage-500">{format(selectedDate, 'EEEE', { locale: pt })}</p>
             </div>
-            <Link to="/dashboard/consultas/nova" className="p-2 rounded-lg hover:bg-sage-50"><Plus className="w-5 h-5 text-sage-600" /></Link>
+            <Link
+              to={`/dashboard/consultas/nova?date=${format(selectedDate, 'yyyy-MM-dd')}`}
+              className="p-2 rounded-lg hover:bg-sage-50"
+            >
+              <Plus className="w-5 h-5 text-sage-600" />
+            </Link>
           </div>
 
           {loading ? (
@@ -139,7 +147,12 @@ export default function AgendaPage() {
             <div className="text-center py-8">
               <CalendarIcon className="w-12 h-12 text-sage-300 mx-auto mb-3" />
               <p className="text-sage-500">Sem consultas neste dia</p>
-              <Link to="/dashboard/consultas/nova" className="inline-block mt-4 text-terracotta-500 hover:text-terracotta-600 font-medium text-sm">Agendar consulta</Link>
+              <Link
+                to={`/dashboard/consultas/nova?date=${format(selectedDate, 'yyyy-MM-dd')}`}
+                className="inline-block mt-4 text-terracotta-500 hover:text-terracotta-600 font-medium text-sm"
+              >
+                Agendar consulta
+              </Link>
             </div>
           ) : (
             <div className="space-y-4">

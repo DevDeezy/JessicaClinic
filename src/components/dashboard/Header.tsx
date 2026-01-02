@@ -1,21 +1,31 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Bell, Search, Plus } from 'lucide-react'
+import { Bell, Search, Plus, Menu } from 'lucide-react'
 
 interface HeaderProps {
   user: {
     name: string
     email: string
   } | null
+  onOpenSidebar: () => void
 }
 
-export default function Header({ user }: HeaderProps) {
+export default function Header({ user, onOpenSidebar }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('')
 
   return (
-    <header className="h-16 bg-white border-b border-sage-100 px-6 flex items-center justify-between">
+    <header className="h-16 bg-white border-b border-sage-100 px-4 md:px-6 flex items-center justify-between gap-4">
+      {/* Mobile menu */}
+      <button
+        className="lg:hidden p-2 rounded-lg hover:bg-sage-50 transition-colors"
+        onClick={onOpenSidebar}
+        aria-label="Abrir menu"
+      >
+        <Menu className="w-5 h-5 text-sage-700" />
+      </button>
+
       {/* Search */}
-      <div className="relative w-96">
+      <div className="relative flex-1 max-w-lg">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-sage-400" />
         <input
           type="text"
@@ -27,10 +37,10 @@ export default function Header({ user }: HeaderProps) {
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 md:gap-4">
         <Link
           to="/dashboard/consultas/nova"
-          className="flex items-center gap-2 px-4 py-2 bg-terracotta-500 text-white rounded-xl font-medium hover:bg-terracotta-600 transition-all"
+          className="hidden sm:flex items-center gap-2 px-4 py-2 bg-terracotta-500 text-white rounded-xl font-medium hover:bg-terracotta-600 transition-all"
         >
           <Plus className="w-4 h-4" />
           Nova Consulta
