@@ -1,5 +1,5 @@
 // Netlify Functions base; override with VITE_API_URL if provided
-const API_URL = import.meta.env.VITE_API_URL || 'https://6957dbf51d1643cf129703cd--jessicaclinic.netlify.app/.netlify/functions'
+const API_URL = import.meta.env.VITE_API_URL || 'https://jessicaclinic.netlify.app/.netlify/functions'
 
 interface RequestOptions {
   method?: string

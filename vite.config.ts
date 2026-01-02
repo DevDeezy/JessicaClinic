@@ -18,7 +18,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://6957dbf51d1643cf129703cd--jessicaclinic.netlify.app/.netlify/functions',
+        target: 'https://jessicaclinic.netlify.app/.netlify/functions',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
