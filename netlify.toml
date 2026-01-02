@@ -1,0 +1,27 @@
+[build]
+  # We don't build the frontend here - it goes to GitHub Pages
+  # This is for Netlify Functions only
+  publish = "netlify-placeholder"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["@prisma/client"]
+  included_files = ["prisma/schema.prisma", "node_modules/.prisma/**"]
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"
+    Access-Control-Allow-Methods = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[dev]
+  port = 8888
+  functionsPort = 9999
+

@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String
+  role          String    @default("fisioterapeuta")
+  phone         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  clients       Client[]
+  appointments  Appointment[]
+}
+
+model Client {
+  id              String    @id @default(cuid())
+  name            String
+  email           String?
+  phone           String
+  birthDate       DateTime?
+  address         String?
+  occupation      String?
+  emergencyContact String?
+  emergencyPhone  String?
+  medicalHistory  String?
+  allergies       String?
+  medications     String?
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  appointments    Appointment[]
+  comments        ClientComment[]
+  files           ClientFile[]
+}
+
+model ClientComment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+}
+
+model ClientFile {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  url         String
+  type        String   @default("document")
+  createdAt   DateTime @default(now())
+  
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+}
+
+model Appointment {
+  id          String   @id @default(cuid())
+  date        DateTime
+  duration    Int      @default(60)
+  status      String   @default("scheduled")
+  type        String   @default("consulta")
+  notes       String?
+  treatmentNotes String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  comments    AppointmentComment[]
+  files       AppointmentFile[]
+}
+
+model AppointmentComment {
+  id            String      @id @default(cuid())
+  content       String
+  createdAt     DateTime    @default(now())
+  
+  appointmentId String
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+}
+
+model AppointmentFile {
+  id            String      @id @default(cuid())
+  name          String
+  description   String?
+  url           String
+  type          String      @default("document")
+  createdAt     DateTime    @default(now())
+  
+  appointmentId String
+  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+}
