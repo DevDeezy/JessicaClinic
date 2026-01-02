@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import App from './App'
 import './index.css'
 
-const basename = import.meta.env.PROD ? '/Jessica' : ''
+const basename = import.meta.env.PROD ? '/JessicaClinic' : ''
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
