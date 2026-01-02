@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { 
   Users, 
   Plus, 
@@ -28,14 +28,21 @@ interface Client {
 
 export default function ClientesPage() {
   const { token } = useAuthStore()
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(true)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
   const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (token) fetchClients()
-  }, [token])
+    if (token) {
+      const initialSearch = searchParams.get('search') || ''
+      setSearchQuery(initialSearch)
+      fetchClients(initialSearch)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, searchParams])
 
   const fetchClients = async (search?: string) => {
     try {
@@ -50,7 +57,9 @@ export default function ClientesPage() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    fetchClients(searchQuery)
+    const query = searchQuery.trim()
+    navigate(query ? `?search=${encodeURIComponent(query)}` : '')
+    fetchClients(query)
   }
 
   const handleDelete = async (id: string) => {

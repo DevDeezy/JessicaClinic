@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Bell, Search, Plus, Menu } from 'lucide-react'
 
 interface HeaderProps {
@@ -12,6 +12,13 @@ interface HeaderProps {
 
 export default function Header({ user, onOpenSidebar }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate()
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const query = searchQuery.trim()
+    navigate(query ? `/dashboard/clientes?search=${encodeURIComponent(query)}` : '/dashboard/clientes')
+  }
 
   return (
     <header className="h-16 bg-white border-b border-sage-100 px-4 md:px-6 flex items-center justify-between gap-4">
@@ -25,7 +32,7 @@ export default function Header({ user, onOpenSidebar }: HeaderProps) {
       </button>
 
       {/* Search */}
-      <div className="relative flex-1 max-w-lg">
+      <form onSubmit={handleSearchSubmit} className="relative flex-1 max-w-lg">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-sage-400" />
         <input
           type="text"
@@ -34,7 +41,7 @@ export default function Header({ user, onOpenSidebar }: HeaderProps) {
           placeholder="Pesquisar clientes, consultas..."
           className="w-full pl-10 pr-4 py-2 rounded-xl border border-sage-200 focus:border-sage-400 focus:ring-2 focus:ring-sage-100 outline-none transition-all bg-cream-50"
         />
-      </div>
+      </form>
 
       {/* Right side */}
       <div className="flex items-center gap-3 md:gap-4">
