@@ -10,7 +10,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: '/Jessica/', // GitHub Pages repository name
+  base: '/JessicaClinic/', // GitHub Pages repository name
   build: {
     outDir: 'dist',
     sourcemap: false,
