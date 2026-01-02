@@ -45,6 +45,9 @@ model Client {
   appointments    Appointment[]
   comments        ClientComment[]
   files           ClientFile[]
+
+  @@index([userId])
+  @@index([email])
 }
 
 model ClientComment {
@@ -88,6 +91,9 @@ model Appointment {
   
   comments    AppointmentComment[]
   files       AppointmentFile[]
+
+  @@index([userId])
+  @@index([clientId])
 }
 
 model AppointmentComment {
