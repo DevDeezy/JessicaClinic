@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -24,7 +25,9 @@ import {
   addDays,
   getHours,
   getMinutes,
-  differenceInMinutes
+  differenceInMinutes,
+  setHours,
+  setMinutes
 } from 'date-fns'
 import { pt } from 'date-fns/locale'
 
@@ -49,11 +52,12 @@ const statusColors: Record<string, { bg: string; border: string; text: string }>
 }
 
 const HOUR_HEIGHT = 60 // pixels per hour
-const START_HOUR = 8 // 8 AM
-const END_HOUR = 20 // 8 PM
+const START_HOUR = 7 // 7 AM
+const END_HOUR = 24 // Midnight
 const HOURS = Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, i) => START_HOUR + i)
 
 export default function AgendaPage() {
+  const router = useRouter()
   const [currentWeek, setCurrentWeek] = useState(new Date())
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [loading, setLoading] = useState(true)
@@ -123,6 +127,28 @@ export default function AgendaPage() {
 
   const currentTimePosition = getCurrentTimePosition()
   const todayIndex = weekDays.findIndex(day => isToday(day))
+
+  // Handle click on empty time slot
+  const handleTimeSlotClick = useCallback((day: Date, event: React.MouseEvent<HTMLDivElement>) => {
+    // Get click position relative to the container
+    const rect = event.currentTarget.getBoundingClientRect()
+    const clickY = event.clientY - rect.top
+    
+    // Calculate the hour and minutes from click position
+    const totalMinutes = (clickY / HOUR_HEIGHT) * 60
+    const hour = Math.floor(totalMinutes / 60) + START_HOUR
+    const minutes = Math.floor(totalMinutes % 60 / 15) * 15 // Round to nearest 15 minutes
+    
+    // Create the datetime
+    const selectedDateTime = setMinutes(setHours(day, hour), minutes)
+    
+    // Format for URL
+    const dateParam = format(selectedDateTime, 'yyyy-MM-dd')
+    const timeParam = format(selectedDateTime, 'HH:mm')
+    
+    // Navigate to new appointment page with pre-filled date and time
+    router.push(`/consultas/nova?date=${dateParam}&time=${timeParam}`)
+  }, [router])
 
   return (
     <div className="space-y-6">
@@ -248,7 +274,7 @@ export default function AgendaPage() {
                   transform: 'translateY(-50%)'
                 }}
               >
-                {hour === 12 ? '12:00' : hour < 12 ? `${hour}:00` : `${hour}:00`}
+                {hour === 24 ? '00:00' : `${hour}:00`}
               </div>
             ))}
           </div>
@@ -261,8 +287,9 @@ export default function AgendaPage() {
             return (
               <div
                 key={dayIndex}
-                className={`relative border-r border-sage-100 last:border-r-0 ${
-                  dayIsToday ? 'bg-terracotta-50/30' : ''
+                onClick={(e) => handleTimeSlotClick(day, e)}
+                className={`relative border-r border-sage-100 last:border-r-0 cursor-pointer hover:bg-sage-50/50 transition-colors ${
+                  dayIsToday ? 'bg-terracotta-50/30 hover:bg-terracotta-50/50' : ''
                 }`}
               >
                 {/* Hour lines */}
@@ -308,6 +335,7 @@ export default function AgendaPage() {
                     <Link
                       key={apt.id}
                       href={`/consultas/${apt.id}`}
+                      onClick={(e) => e.stopPropagation()}
                       className={`absolute left-1 right-1 rounded-lg border-l-4 ${colors.bg} ${colors.border} ${colors.text} p-2 overflow-hidden hover:shadow-md transition-shadow z-10 cursor-pointer`}
                       style={style}
                     >

@@ -18,13 +18,15 @@ export default function NovaConsultaPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const preSelectedClientId = searchParams.get('clientId')
+  const preSelectedDate = searchParams.get('date')
+  const preSelectedTime = searchParams.get('time')
   
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     clientId: preSelectedClientId || '',
-    date: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
-    time: '10:00',
+    date: preSelectedDate || format(addDays(new Date(), 1), 'yyyy-MM-dd'),
+    time: preSelectedTime || '10:00',
     duration: 60,
     type: 'consulta',
     notes: ''
@@ -88,7 +90,7 @@ export default function NovaConsultaPage() {
   }
 
   const timeSlots = []
-  for (let h = 8; h <= 20; h++) {
+  for (let h = 7; h <= 23; h++) {
     for (let m = 0; m < 60; m += 30) {
       timeSlots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`)
     }
