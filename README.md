@@ -110,9 +110,6 @@ Abrir:
 - Frontend: http://localhost:5173
 - Backend: http://localhost:8888
 
-### Conta de Demonstração
-- **Email**: admin@jessica.pt
-- **Password**: admin123
 
 ## 📁 Estrutura
 
